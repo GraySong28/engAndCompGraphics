@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,138 +17,142 @@ namespace Lab2
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
+            // Создаю объек parabola класса Graphics и передаём ему право рисовать на PB1
+            Graphics parabola = pictureBox1.CreateGraphics();
             // Меняю цвет фона при нажатии
-            pictureBox1.BackColor = Color.FromName("LightCyan");
+            pictureBox1.BackColor = Color.FromName("White");
             pictureBox1.Refresh();
-
+            // Переключаю юниты на пикселы
+            parabola.PageUnit = GraphicsUnit.Pixel;
             // Создаю кисть для рисования контура и координатных осей
             Pen penForCountur = new Pen(Color.Tomato, 1);
-            // Объявил объект axles класса Graphics, ередал ему права для рисования в PB1
-            Graphics axles = pictureBox1.CreateGraphics();
-            // Рисуем прямоугольник:
-            axles.DrawRectangle(penForCountur, 0, 0, pictureBox1.Size.Width - 1, pictureBox1.Size.Height - 1);
-            // рисуем ось X и Y
-            axles.DrawLine(penForCountur, 0, (pictureBox1.Size.Height / 2) - 1, pictureBox1.Size.Width - 1, (pictureBox1.Size.Height / 2) - 1);
-            axles.DrawLine(penForCountur, (pictureBox1.Size.Width / 2) - 1, 0, (pictureBox1.Size.Width / 2) - 1, pictureBox1.Size.Height - 1);
-            
-            // Объявил объект parabola класса Graphics, ередал ему права для рисования в PB1
-            Graphics parabola = pictureBox1.CreateGraphics();
-            // Поменял единицы измерения на Пиксели
-            parabola.PageUnit = GraphicsUnit.Pixel;
-            // Кисть для рисование графика
-            Pen penForParabola = new Pen(Color.FromArgb(0, 0, 0));            
-            // Рисуем график функции y=3x^2+1
-            int ex = 0, ey = 0, old_ex = 0, old_ey = 0;
+            // Рисую рамку, оси X и Y
+            parabola.DrawRectangle(penForCountur, 0, 0, pictureBox1.Size.Width - 1, pictureBox1.Size.Height - 1);
+            parabola.DrawLine(penForCountur, 0, (pictureBox1.Size.Height / 2) - 1, pictureBox1.Size.Width - 1, (pictureBox1.Size.Height / 2) - 1);
+            parabola.DrawLine(penForCountur, (pictureBox1.Size.Width / 2) - 1, 0, (pictureBox1.Size.Width / 2) - 1, pictureBox1.Size.Height - 1);
+            // Получаю цену деления по осям в пикселях
+            int delForX = pictureBox1.Size.Width / 20;
+            int delForY = pictureBox1.Size.Height / 20;
+            // Вывожу деления на оси
+            for (int i = 0; i < 20; i++)
+            {
+                parabola.DrawLine(penForCountur, i * delForX, (pictureBox1.Size.Height / 2) - 1, i * delForX, (pictureBox1.Size.Height / 2) + 10);
+                parabola.DrawLine(penForCountur, (pictureBox1.Size.Width / 2) - 1, Convert.ToInt16(i * delForY), (pictureBox1.Size.Width / 2) + 10, Convert.ToInt16(i * delForY));
+            }
+            // Создаю кисть для рисования графика
+            Pen penForParabola = new Pen(Color.FromArgb(0, 0, 0), 1);
+            // Рисую график функции y=3x^2+1
+            int ex, ey, old_ex = 0, old_ey = 0;
             double x = 0, y = 0;
-            x = - 10;
-            for (ex = 350; ex <= 550; ex++)
+            x = -10;
+            for (ex = 0; ex < pictureBox1.Size.Width; ex++)
             {
                 y = (3 * x * x) + 1;
-                ey = (pictureBox1.Size.Height - 1) - (Convert.ToInt16(y + 225));
-                if (ex != 0) 
-                { 
-                    parabola.DrawLine(penForParabola, old_ex, old_ey, ex, ey); 
-                }
+                ey = (pictureBox1.Size.Height - 1) - (Convert.ToInt32(y * delForY) + (pictureBox1.Size.Height / 2));
+                parabola.DrawLine(penForParabola, old_ex, old_ey, ex, ey); 
                 old_ex = ex; old_ey = ey;
-                x += 0.1;
+                x += 0.02;
             }
-
-            // Вызываю метод для отрисовки
-            axles.Dispose();
         }
-
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
-            // Меняю цвет фона при нажатии
-            pictureBox1.BackColor = Color.FromName("LightCyan");
-            pictureBox1.Refresh();
-
-            // Создаю кисть для рисования контура и координатных осей
-            Pen penForCountur = new Pen(Color.Tomato, 1);
-            // Объявил объект axles класса Graphics, ередал ему права для рисования в PB1
-            Graphics axles = pictureBox1.CreateGraphics();
-            // Рисуем прямоугольник:
-            axles.DrawRectangle(penForCountur, 0, 0, pictureBox1.Size.Width - 1, pictureBox1.Size.Height - 1);
-            // рисуем ось X и Y
-            axles.DrawLine(penForCountur, 0, (pictureBox1.Size.Height / 2) - 1, pictureBox1.Size.Width - 1, (pictureBox1.Size.Height / 2) - 1);
-            axles.DrawLine(penForCountur, (pictureBox1.Size.Width / 2) - 1, 0, (pictureBox1.Size.Width / 2) - 1, pictureBox1.Size.Height - 1);
-
-            // Объявил объект parabola класса Graphics, ередал ему права для рисования в PB1
+            // Создаю объек parabola класса Graphics и передаём ему право рисовать на PB1
             Graphics parabola = pictureBox1.CreateGraphics();
-            // Поменял единицы измерения на Миллиметры
+            // Меняю цвет фона при нажатии
+            pictureBox1.BackColor = Color.FromName("White");
+            pictureBox1.Refresh();
+            // Переключаю юниты на пикселы
             parabola.PageUnit = GraphicsUnit.Millimeter;
-            // Кисть для рисование графика
-            Pen penForParabola = new Pen(Color.FromArgb(0, 0, 0), 0.1f);            
-            // Рисуем график функции y=3x^2+1
-            int ex = 0, ey = 0, old_ex = 0, old_ey = 0;
-            double x = 0, y = 0;
+            // Создаю кисть для рисования контура и координатных осей
+            Pen penForCountur = new Pen(Color.Tomato, 0.1f);
+            // Получаем размеры PB в ММ
             int WidthInMM = Convert.ToInt16((pictureBox1.Size.Width - 1) / parabola.DpiX * 25.4);
             int HeightInMM = Convert.ToInt16((pictureBox1.Size.Height - 1) / parabola.DpiY * 25.4);
-            x = - 12;
+            //Console.WriteLine(WidthInMM);
+            //Console.WriteLine(HeightInMM);
+            // Рисую рамку, оси X и Y
+            parabola.DrawRectangle(penForCountur, 0, 0, WidthInMM, HeightInMM);
+            parabola.DrawLine(penForCountur, 0, HeightInMM / 2, WidthInMM, HeightInMM / 2);
+            parabola.DrawLine(penForCountur, WidthInMM / 2, 0, WidthInMM / 2, HeightInMM);
+            // Получаю цену деления по осям в пикселях
+            int delForX = WidthInMM / 15;
+            int delForY = HeightInMM / 10;
+            // Вывожу деления на оси
+            for (int i = 0; i < 15; i++)
+            {
+                parabola.DrawLine(penForCountur, i * delForX - 4, HeightInMM / 2, i * delForX - 4, (HeightInMM / 2) + 2);
+                parabola.DrawLine(penForCountur, WidthInMM / 2, Convert.ToInt16(i * delForY + 1), (WidthInMM / 2) + 2, Convert.ToInt16(i * delForY + 1));
+            }
+            // Создаю кисть для рисования графика
+            Pen penForParabola = new Pen(Color.FromArgb(0, 0, 0), 0.1f);
+            // Рисую график функции y=3x^2+1
+            int ex, ey, old_ex = 0, old_ey = 0;
+            double x = 0, y = 0;
+            x = -10;
             for (ex = 0; ex <= WidthInMM; ex++)
             {
                 y = (3 * x * x) + 1;
-                ey = HeightInMM - (Convert.ToInt16(y * Convert.ToSingle(200 / parabola.DpiX)) + Convert.ToInt16(250 / parabola.DpiX) + 55);
-                if (ex != 0) 
-                { 
-                    parabola.DrawLine(penForParabola, old_ex, old_ey, ex, ey); 
-                }
+                // (pictureBox1.Size.Height - 1) - (Convert.ToInt32(y * delForY) + (pictureBox1.Size.Height / 2));
+                ey = HeightInMM - Convert.ToInt32(y * delForY) - (HeightInMM / 2);
+                parabola.DrawLine(penForParabola, old_ex, old_ey, ex, ey);
                 old_ex = ex; old_ey = ey;
-                x += 0.1;
+                x += 0.075;
             }
         }
-
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
-            // Меняю цвет фона при нажатии
-            pictureBox1.BackColor = Color.FromName("LightCyan");
-            pictureBox1.Refresh();
-
-            // Создаю кисть для рисования контура и координатных осей
-            Pen penForCountur = new Pen(Color.Tomato, 1);
-            // Объявил объект axles класса Graphics, ередал ему права для рисования в PB1
-            Graphics axles = pictureBox1.CreateGraphics();
-            // Рисуем прямоугольник:
-            axles.DrawRectangle(penForCountur, 0, 0, pictureBox1.Size.Width - 1, pictureBox1.Size.Height - 1);
-            // рисуем ось X и Y
-            axles.DrawLine(penForCountur, 0, (pictureBox1.Size.Height / 2) - 1, pictureBox1.Size.Width - 1, (pictureBox1.Size.Height / 2) - 1);
-            axles.DrawLine(penForCountur, (pictureBox1.Size.Width / 2) - 1, 0, (pictureBox1.Size.Width / 2) - 1, pictureBox1.Size.Height - 1);
-                        
-            // Объявил объект parabola класса Graphics, ередал ему права для рисования в PB1
+            // Создаю объек parabola класса Graphics и передаём ему право рисовать на PB1
             Graphics parabola = pictureBox1.CreateGraphics();
-            // Поменял единицы измерения на Дюймы
+            // Меняю цвет фона при нажатии
+            pictureBox1.BackColor = Color.FromName("White");
+            pictureBox1.Refresh();
+            // Переключаю юниты на пикселы
             parabola.PageUnit = GraphicsUnit.Inch;
-            // Кисть для рисование графика
-            Pen penForParabola = new Pen(Color.FromArgb(0, 0, 0), 0.01f);
-            // Рисуем график функции y=3x^2+1
+            // Создаю кисть для рисования контура и координатных осей
+            Pen penForCountur = new Pen(Color.Tomato, 0.01f);
+            // Получаем размер PB в Дюймах
             float WidthInInches = (pictureBox1.Size.Width - 1) / parabola.DpiX;
             float HeightInInches = (pictureBox1.Size.Height - 1) / parabola.DpiY;
+            // Рисую рамку, оси X и Y
+            parabola.DrawRectangle(penForCountur, 0, 0, WidthInInches, HeightInInches);
+            parabola.DrawLine(penForCountur, 0, HeightInInches / 2, WidthInInches, HeightInInches / 2);
+            parabola.DrawLine(penForCountur, WidthInInches / 2, 0, WidthInInches / 2, HeightInInches);
+            Console.WriteLine(WidthInInches);
+            Console.WriteLine(HeightInInches);
+            // Получаю цену деления по осям в пикселях
+            float delForX = WidthInInches / 10;
+            //float delForY = HeightInInches / 5;
+            // Вывожу деления на оси
+            for (int i = 0; i < 10; i++)
+            {
+                parabola.DrawLine(penForCountur, (i * delForX), HeightInInches / 2, (i * delForX), (HeightInInches / 2) + 1);
+                //parabola.DrawLine(penForCountur, WidthInInches / 2, Convert.ToInt16((i * delForY) + 1), (WidthInInches / 2) + 1, Convert.ToInt16((i * delForY) + 1));
+            }
+            // Создаю кисть для рисования графика
+            Pen penForParabola = new Pen(Color.FromArgb(0, 0, 0), 0.01f);
+            // Рисую график функции y=3x^2+1
             float ex = 0, old_ex = 0, ey = 0, old_ey = 0;
             float x = 0, y = 0;
-            float shag = 0;
-            x = - 10;
-            shag = Convert.ToSingle(WidthInInches / 200);
+            float shag;
+            x = Convert.ToSingle(- 5.2);
+            shag = Convert.ToSingle(WidthInInches / 100);
             while (ex <= WidthInInches + shag)
             {
                 y = (3 * x * x) + 1;
-                ey = Convert.ToSingle(-y) + (HeightInInches / 2 + 1);
-                if (ex != 0) 
-                { 
-                    parabola.DrawLine(penForParabola, old_ex, old_ey, ex, ey); 
-                }
+                ey = Convert.ToSingle(-y) + HeightInInches / 2;
+                parabola.DrawLine(penForParabola, old_ex, old_ey, ex, ey);
                 old_ex = ex; old_ey = ey;
                 ex = ex + shag;
-                x += Convert.ToSingle(0.1);
+                x += shag;
             }
-
         }
-        private void button4_Click(object sender, EventArgs e)
+
+        private void Button4_Click(object sender, EventArgs e)
         {
             Graphics clear = pictureBox1.CreateGraphics();
             clear.Clear(Color.FromArgb(220, 220, 220));
-        }
-                
+        }                
     }
 }
