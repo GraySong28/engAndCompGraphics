@@ -1,0 +1,10 @@
+D:\Sharaga\1 kurs\engAndCompGraphics\Lab6\bin\Debug\Lab6.exe.config
+D:\Sharaga\1 kurs\engAndCompGraphics\Lab6\bin\Debug\Lab6.exe
+D:\Sharaga\1 kurs\engAndCompGraphics\Lab6\bin\Debug\Lab6.pdb
+D:\Sharaga\1 kurs\engAndCompGraphics\Lab6\obj\Debug\Lab6.csprojAssemblyReference.cache
+D:\Sharaga\1 kurs\engAndCompGraphics\Lab6\obj\Debug\Lab6.Form1.resources
+D:\Sharaga\1 kurs\engAndCompGraphics\Lab6\obj\Debug\Lab6.Properties.Resources.resources
+D:\Sharaga\1 kurs\engAndCompGraphics\Lab6\obj\Debug\Lab6.csproj.GenerateResource.cache
+D:\Sharaga\1 kurs\engAndCompGraphics\Lab6\obj\Debug\Lab6.csproj.CoreCompileInputs.cache
+D:\Sharaga\1 kurs\engAndCompGraphics\Lab6\obj\Debug\Lab6.exe
+D:\Sharaga\1 kurs\engAndCompGraphics\Lab6\obj\Debug\Lab6.pdb
